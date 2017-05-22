@@ -1,0 +1,26 @@
+/*
+ *
+ * {{ properCase name }} reducer
+ * @flow
+ */
+
+import { fromJS, Map } from 'immutable';
+import {
+  nameSpace,
+  DEFAULT_ACTION,
+} from './constants'
+
+const initialState = fromJS({
+})
+
+function {{ camelCase name }}Reducer (state: Map<*, *> = initialState, action: Redux$Action) {
+  switch (action.type) {
+    case DEFAULT_ACTION:
+      return state
+    default:
+      return state
+  }
+}
+
+{{ camelCase name }}Reducer.nameSpace = nameSpace
+export default {{ camelCase name }}Reducer

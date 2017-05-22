@@ -1,0 +1,28 @@
+[ignore]
+.*/styled-components/src/.*
+.*/styled-components/flow-typed/npm/express_v4.x.x.js
+.*/node_modules/.*/node_modules/fbjs/.*
+<PROJECT_ROOT>/node_modules/styled-components/lib/models/StyleSheet.js.flow
+<PROJECT_ROOT>/node_modules/styled-components/dangerfile.js
+<PROJECT_ROOT>/internals
+<PROJECT_ROOT>/docs
+
+[include]
+
+[libs]
+flow/
+node_modules/styled-components/flow-typed/react-native.js
+node_modules/styled-components/flow-typed/glamor_vx.x.x.js
+node_modules/styled-components/flow-typed/lodash_v4.x.x.js
+node_modules/styled-components/flow-typed/inline-style-prefixer_vx.x.x.js
+
+[options]
+emoji=true
+munge_underscores=true
+module.name_mapper='^components/\(.*\)$' -> '<PROJECT_ROOT>/app/components/\1'
+module.name_mapper='^assets/\(.*\)$' -> '<PROJECT_ROOT>/app/assets/\1'
+module.name_mapper='^containers/\(.*\)$' -> '<PROJECT_ROOT>/app/containers/\1'
+module.name_mapper='^model/\(.*\)$' -> '<PROJECT_ROOT>/app/resources/\1'
+module.name_mapper='^utils/\(.*\)$' -> '<PROJECT_ROOT>/app/utils/\1'
+module.name_mapper='^reducers\(\.js\)?$' -> '<PROJECT_ROOT>/app/reducers.js'
+module.name_mapper='^config\(\.js\)?$' -> '<PROJECT_ROOT>/app/config.js'

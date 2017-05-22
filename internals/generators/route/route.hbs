@@ -1,0 +1,7 @@
+ {
+      path: '{{ path }}',
+      name: '{{ camelCase component }}',
+      getComponent(location, cb) {
+        loadStandaloneComponent(import('{{{directory (properCase component)}}}'))
+      },
+    },$1

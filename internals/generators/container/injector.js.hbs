@@ -1,0 +1,32 @@
+/*
+ * {{properCase name}}
+ * @flow
+ */
+import React from 'react'
+import { connect } from 'react-redux'
+import { createStructuredSelector } from 'reselect';
+import makeSelect{{properCase name}} from './selectors';
+
+type PropsType = {
+}
+
+export default function inject{{properCase name }} (
+  Component: ReactComponent,
+  optionsOrPassThroughProps: Object = {}
+) {
+  class {{properCase name}}Container extends React.PureComponent<void, PropsType, void> { // eslint-disable-line react/prefer-stateless-function
+    render () {
+      // $FlowFixMe
+      return (<Component
+        {...optionsOrPassThroughProps}
+        {...this.props}
+      />)
+    }
+  }
+
+  const mapStateToProps = createStructuredSelector({
+    {{name}}: makeSelect{{properCase name}}(),
+  })
+
+  return connect(mapStateToProps)({{properCase name}}Container)
+}
