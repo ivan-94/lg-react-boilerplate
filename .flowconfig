@@ -4,7 +4,6 @@
 .*/node_modules/.*/node_modules/fbjs/.*
 <PROJECT_ROOT>/node_modules/styled-components/lib/models/StyleSheet.js.flow
 <PROJECT_ROOT>/node_modules/styled-components/dangerfile.js
-<PROJECT_ROOT>/internals
 <PROJECT_ROOT>/docs
 
 [include]
@@ -18,7 +17,12 @@ node_modules/styled-components/flow-typed/inline-style-prefixer_vx.x.x.js
 
 [options]
 emoji=true
+module.file_ext=.svg
+module.file_ext=.js
+module.file_ext=.jsx
+module.file_ext=.json
 munge_underscores=true
+module.name_mapper='.*\.svg$' -> '<PROJECT_ROOT>/internals/mocks/svg.js.flow'
 module.name_mapper='^components/\(.*\)$' -> '<PROJECT_ROOT>/app/components/\1'
 module.name_mapper='^assets/\(.*\)$' -> '<PROJECT_ROOT>/app/assets/\1'
 module.name_mapper='^containers/\(.*\)$' -> '<PROJECT_ROOT>/app/containers/\1'

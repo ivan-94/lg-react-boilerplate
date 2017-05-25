@@ -1,4 +1,3 @@
-import { List, Map } from 'immutable'
 // eslint-disable-next-line no-undef
 declare type Redux$Action = {
   type: string,

@@ -1,0 +1,6 @@
+// @flow
+declare export default {
+  id: string,
+  content: string,
+  viewBox: string,
+}

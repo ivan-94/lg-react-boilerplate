@@ -16,6 +16,6 @@ export default function Icon (props: {
   className?: string,
 }) {
   return (<Svg className={props.className} fill={props.fill} viewBox={props.src.viewBox}>
-    <use xlinkHref={props.src.id} />
+    <use xlinkHref={`#${props.src.id}`} />
   </Svg>)
 }
