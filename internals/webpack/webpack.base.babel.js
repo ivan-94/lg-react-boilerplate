@@ -29,11 +29,10 @@ module.exports = options => ({
       loaders: ['style-loader', 'css-loader'],
     }, {
       test: /\.svg$/,
-      loader: 'svg-sprite-loader',
-      query: {
-        name: 'icon-[name]-[hash]',
-        prefixize: true,
-      },
+      use: [
+        { loader: 'svg-sprite-loader' },
+        'svgo-loader',
+      ],
     }, {
       test: /\.(eot|ttf|woff|woff2)$/,
       loader: 'file-loader',
@@ -101,6 +100,6 @@ module.exports = options => ({
     ],
   },
   devtool: options.devtool,
-  target: 'web', // Make web variables accessible to webpack, e.g. window
+  target: options.target || 'web', // Make web variables accessible to webpack, e.g. window
   performance: options.performance || {},
 });

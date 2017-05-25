@@ -19,49 +19,10 @@ declare type IntlProps = {
 // eslint-disable-next-line no-undef
 declare type ReactComponent = Function | React$Component<*, *, *> | React$PureComponent<*, *, *>
 
+// svg-sprite-loader(2.0)
 // eslint-disable-next-line no-undef
-declare type ListContainerProps = {
-  loading: boolean,
-  error: any,
-  totalPages: number,
-  page: number,
-  allList: List<*>,
-  list: ?List<*>,
-  flattenList: List<*>,
-  dispatch: Function,
-}
-
-// eslint-disable-next-line no-undef
-declare type ListContainerWrappedProps = ListContainerProps & {
-  hasMore: boolean,
-  onPageChange: (page: number) => void,
-  onEndReached: Function,
-}
-
-// eslint-disable-next-line no-undef
-declare type FormContainerProps = {
-  creating: boolean,
-  error: any,
-  dispatch: Function,
-}
-
-// eslint-disable-next-line no-undef
-declare type FormContainerWrappedProps = FormContainerProps & {
-  schema: Object,
-  model: Object,
-  onChange: Function,
-  onSubmit: Function,
-}
-
-// eslint-disable-next-line no-undef
-declare type DetailContentProps = {
-  loading: boolean,
-  error: any,
-  content: ?Map<*, *>,
-  dispatch: Function,
-}
-
-// eslint-disable-next-line no-undef
-declare type DetailContentWrappedProps = DetailContentProps & {
-  params: Object,
+declare type SpriteSymbol = {
+  id: string,
+  viewBox: string,
+  content: string,
 }

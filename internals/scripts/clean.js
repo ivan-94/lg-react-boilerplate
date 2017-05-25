@@ -19,6 +19,7 @@ cp('app/__tests__/i18n.test.js', 'internals/templates/__tests__/i18n.test.js');
 
 // Cleanup components/
 rm('-rf', 'app/components/*');
+mv('internals/templates/components', 'app');
 
 // Handle containers/
 rm('-rf', 'app/containers');
