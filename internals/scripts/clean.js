@@ -25,6 +25,8 @@ mv('internals/templates/components', 'app');
 rm('-rf', 'app/containers');
 mv('internals/templates/containers', 'app');
 
+mv('internals/templates/assets', 'app');
+
 // Handle tests/
 mv('internals/templates/__tests__', 'app');
 
