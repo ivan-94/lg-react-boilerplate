@@ -1,9 +1,6 @@
 // server side bundle
 const path = require('path')
 const webpack = require('webpack')
-const HtmlWebpackPlugin = require('html-webpack-plugin');
-const FaviconsWebpackPlugin = require('favicons-webpack-plugin')
-const determineFile = require('./helpers').determineFile
 
 module.exports = require('./webpack.base.babel')({
   target: 'node',
@@ -11,43 +8,39 @@ module.exports = require('./webpack.base.babel')({
     server: path.join(process.cwd(), 'app/server.js'),
   },
   output: {
-    filename: 'server.js',
+    filename: '../../server.js',
     libraryTarget: 'commonjs2',
   },
+  babelQuery: {
+    presets: [
+      [
+        'env',
+        {
+          targets: {
+            node: 'current',
+          },
+          modules: false,
+          // useBuiltIns: true,
+        },
+      ],
+    ],
+  },
   plugins: [
-    new FaviconsWebpackPlugin({
-      logo: './app/assets/images/favicons.png',
-      inject: true,
-      title: '朗捷科技',
-      icons: {
-        favicons: true,
-        appleIcon: true,
-        appleStartup: false,
-        android: false,
-        twitter: false,
-        yandex: false,
-        windows: false,
-        coast: false,
-        firefox: false,
-      },
+    new webpack.BannerPlugin({
+      banner: 'require("source-map-support").install()',
+      raw: true,
+      entryOnly: true,
     }),
-
-    // Minify and optimize the index.html
-    new HtmlWebpackPlugin({
-      template: determineFile('app/index', '.html'),
-      minify: {
-        removeComments: true,
-        collapseWhitespace: true,
-        removeRedundantAttributes: true,
-        useShortDoctype: true,
-        removeEmptyAttributes: true,
-        removeStyleLinkTypeAttributes: true,
-        keepClosingSlash: true,
-        minifyJS: true,
-        minifyCSS: true,
-        minifyURLs: true,
-      },
-      inject: true,
-    }),
+    new webpack.optimize.LimitChunkCountPlugin({ maxChunks: 1 }),
   ],
+  externals: [
+    /^\.\/assets\.json/,
+    (context, request, callback) => {
+      const isExternal =
+        request.match(/^[@a-z][a-z/.\-0-9]*$/i) &&
+        !request.match(/\.(css|less|scss|sss)$/i);
+      callback(null, Boolean(isExternal))
+    },
+  ],
+  devtool: 'cheap-module-source-map',
 })

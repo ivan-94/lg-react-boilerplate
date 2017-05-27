@@ -35,6 +35,7 @@ const ReactBoilerplate = {
         'ip',
         'minimist',
         'sanitize.css',
+        'source-map-support',
       ],
 
       /**

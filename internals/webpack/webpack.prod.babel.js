@@ -2,6 +2,7 @@
 const path = require('path');
 const webpack = require('webpack');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
+const AssetsPlugin = require('assets-webpack-plugin')
 const FaviconsWebpackPlugin = require('favicons-webpack-plugin')
 const OfflinePlugin = require('offline-plugin');
 const determineFile = require('./helpers').determineFile
@@ -59,6 +60,12 @@ module.exports = require('./webpack.base.babel')({
         minifyURLs: true,
       },
       inject: true,
+    }),
+
+    new AssetsPlugin({
+      path: path.resolve(process.cwd(), 'build'),
+      filename: 'assets.json',
+      prettyPrint: true,
     }),
 
     // Put it in the end to capture all the HtmlWebpackPlugin's

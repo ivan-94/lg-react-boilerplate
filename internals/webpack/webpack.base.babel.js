@@ -9,8 +9,8 @@ const determineExtensions = require('./helpers').determineExtensions
 module.exports = options => ({
   entry: options.entry,
   output: Object.assign({ // Compile into js/build.js
-    path: path.resolve(process.cwd(), 'build'),
-    publicPath: '/',
+    path: path.resolve(process.cwd(), 'build/public/assets'),
+    publicPath: '/assets/',
   }, options.output), // Merge with env dependent settings
   module: {
     loaders: [{
@@ -99,6 +99,7 @@ module.exports = options => ({
       'main',
     ],
   },
+  externals: options.externals,
   devtool: options.devtool,
   target: options.target || 'web', // Make web variables accessible to webpack, e.g. window
   performance: options.performance || {},
