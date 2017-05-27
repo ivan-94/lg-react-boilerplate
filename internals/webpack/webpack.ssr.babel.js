@@ -3,6 +3,7 @@ const path = require('path')
 const webpack = require('webpack')
 
 module.exports = require('./webpack.base.babel')({
+  name: 'Server',
   target: 'node',
   entry: {
     server: path.join(process.cwd(), 'app/server.js'),

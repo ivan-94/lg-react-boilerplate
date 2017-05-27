@@ -7,6 +7,7 @@ const webpack = require('webpack');
 const determineExtensions = require('./helpers').determineExtensions
 
 module.exports = options => ({
+  name: options.name || 'Client',
   entry: options.entry,
   output: Object.assign({ // Compile into js/build.js
     path: path.resolve(process.cwd(), 'build/public/assets'),
@@ -103,4 +104,14 @@ module.exports = options => ({
   devtool: options.devtool,
   target: options.target || 'web', // Make web variables accessible to webpack, e.g. window
   performance: options.performance || {},
+  stats: Object.assign({
+    colors: true,
+    timings: true,
+    hash: false,
+    version: false,
+    chunks: true,
+    chunkModules: false,
+    cached: false,
+    cachedAssets: false,
+  }),
 });

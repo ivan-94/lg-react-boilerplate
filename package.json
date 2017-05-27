@@ -25,10 +25,10 @@
     "build:clean": "npm run test:clean && rimraf ./build",
     "build:dll": "node ./internals/scripts/dependencies.js",
     "build:ssr": "cross-env NODE_ENV=production webpack --config internals/webpack/webpack.ssr.babel.js --progress",
-    "start": "cross-env NODE_ENV=development node server",
-    "start:tunnel": "cross-env NODE_ENV=development ENABLE_TUNNEL=true node server",
+    "start": "cross-env NODE_ENV=development babel-node internals/tasks/run start",
+    "start:tunnel": "cross-env NODE_ENV=development ENABLE_TUNNEL=true babel-node internals/tasks/run start",
     "start:production": "npm run test && npm run build && npm run start:prod",
-    "start:prod": "cross-env NODE_ENV=production node server",
+    "start:prod": "cross-env NODE_ENV=production babel-node internals/tasks/run start",
     "presetup": "npm i chalk shelljs",
     "setup": "node ./internals/scripts/setup.js",
     "postsetup": "npm run build:dll",
@@ -46,7 +46,8 @@
     "test": "cross-env NODE_ENV=test jest --coverage",
     "test:watch": "cross-env NODE_ENV=test jest --watchAll",
     "coveralls": "cat ./coverage/lcov.info | coveralls",
-    "ssr:clean": "babel-node internals/tasks/run clean"
+    "ssr:clean": "babel-node internals/tasks/run clean",
+    "ssr:start": "babel-node internals/tasks/run ssr/start"
   },
   "lint-staged": {
     "*.js": "lint:eslint"
@@ -54,10 +55,12 @@
   "pre-commit": "lint:staged",
   "proxy": {
     "path": "^/large.*",
-    "config": {
-      "host": "www.zhlarge.com",
-      "protocol": "http",
-      "port": 80
+    "options": {
+      "target": {
+        "host": "www.zhlarge.com",
+        "protocol": "http",
+        "port": 80
+      }
     }
   },
   "babel": {
@@ -345,6 +348,7 @@
     "url-loader": "0.5.7",
     "webpack": "2.5.1",
     "webpack-dev-middleware": "1.10.2",
-    "webpack-hot-middleware": "2.18.0"
+    "webpack-hot-middleware": "2.18.0",
+    "write-file-webpack-plugin": "^4.0.2"
   }
 }
