@@ -38,8 +38,11 @@ mv('internals/templates/translations', 'app');
 rm('-rf', 'app/utils');
 mv('internals/templates/utils', 'app')
 
+cp('internals/templates/ssr', 'app/ssr')
+
 // Replace the files in the root app/ folder
 cp('internals/templates/app.js', 'app/app.js');
+cp('internals/templates/server.js', 'app/server.js');
 cp('internals/templates/global-styles.js', 'app/global-styles.js');
 cp('internals/templates/history.js', 'app/history.js');
 cp('internals/templates/i18n.js', 'app/i18n.js');

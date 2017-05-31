@@ -1,6 +1,6 @@
 // @flow
 import type { Store } from 'redux'
-import createReducer from 'reducers';
+import createReducer from '../reducers';
 
 export type StoreType = Store<*, *> & {
   asyncReducers: Object,

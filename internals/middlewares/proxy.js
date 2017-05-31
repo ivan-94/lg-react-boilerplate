@@ -1,6 +1,5 @@
 /*
  * 代理中间件
- * @flow
  */
 const chalk = require('chalk')
 const url = require('url')
@@ -24,17 +23,17 @@ function onProxyError (options: ProxyOptions) {
     const host = req.headers && req.headers.host;
     const target = JSON.stringify(options.options.target)
     console.log(
-      `${chalk.red('Proxy error')}: Could not proxy request ${chalk.cyan(req.url)}
-       from ${chalk.cyan(host)} to ${chalk.cyan(target)}.
-       Error Code: ${chalk.cyan(err.code)}.
-      `
+`${chalk.red('[Proxy error]')}: Could not proxy request ${chalk.cyan(req.url)}
+ from ${chalk.cyan(host)} to ${chalk.cyan(target)}.
+ Error Code: ${chalk.cyan(err.code)}.
+`
     )
     // And immediately send the proper error response to the client.
     // Otherwise, the request will eventually timeout with ERR_EMPTY_RESPONSE on the client side.
     if (res.writeHead && !res.headersSent) {
       res.writeHead(500);
     }
-    res.end(`Proxy error: Could not proxy request ${req.url} from ${host} to ${target} (${err.code}).`)
+    res.end(`[Proxy error]: Could not proxy request ${req.url} from ${host} to ${target} (${err.code}).`)
   }
 }
 
@@ -74,7 +73,7 @@ module.exports = function setupProxy (app, options: ProxyOptions) {
   const hpm = httpProxyMiddleware(options.context, options.options)
   const from = options.path || (typeof options.context === 'function' ? 'Unknown' : options.context)
   console.log(
-    `${chalk.green('Proxy')}: ${from} ${chalk.blue('->')} ${JSON.stringify(orgTarget)}`
+    `${chalk.green('[Proxy]')}: ${from} ${chalk.blue('->')} ${JSON.stringify(orgTarget)}`
   )
   const path = options.path instanceof RegExp ? options.path : RegExp(options.path)
   app.use(path, hpm);

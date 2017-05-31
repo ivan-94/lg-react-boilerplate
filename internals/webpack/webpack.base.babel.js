@@ -2,15 +2,16 @@
  * COMMON WEBPACK CONFIGURATION
  */
 
-const path = require('path');
 const webpack = require('webpack');
+const ExtractTextPlugin = require('extract-text-webpack-plugin')
 const determineExtensions = require('./helpers').determineExtensions
+const config = require('../config')
 
 module.exports = options => ({
   name: options.name || 'Client',
   entry: options.entry,
   output: Object.assign({ // Compile into js/build.js
-    path: path.resolve(process.cwd(), 'build/public/assets'),
+    path: config.outputPath,
     publicPath: '/assets/',
   }, options.output), // Merge with env dependent settings
   module: {
@@ -27,7 +28,10 @@ module.exports = options => ({
       // So, no need for ExtractTextPlugin here.
       test: /\.css$/,
       include: /node_modules/,
-      loaders: ['style-loader', 'css-loader'],
+      use: options.cssLoader || ExtractTextPlugin.extract({
+        fallback: 'style-loader',
+        use: 'css-loader',
+      }),
     }, {
       test: /\.svg$/,
       use: [
@@ -37,9 +41,21 @@ module.exports = options => ({
     }, {
       test: /\.(eot|ttf|woff|woff2)$/,
       loader: 'file-loader',
+      query: {
+        emitFile: !options.isSSR,
+      },
     }, {
       test: /\.(jpg|png|gif)$/,
-      loaders: [
+      loaders: options.isSSR
+      ? [
+        {
+          loader: 'file-loader',
+          query: {
+            emitFile: false,
+          },
+        },
+      ]
+      : [
         'file-loader',
         {
           loader: 'image-webpack-loader',
@@ -65,24 +81,29 @@ module.exports = options => ({
       loader: 'url-loader',
       query: {
         limit: 10000,
+        emitFile: !options.isSSR,
       },
     }],
   },
-  plugins: options.plugins.concat([
+  plugins: options.plugins
+  .concat([
+    new ExtractTextPlugin('style.css'),
     new webpack.ProvidePlugin({
       // make fetch available
       fetch: 'exports-loader?self.fetch!whatwg-fetch',
     }),
-
-    // Always expose NODE_ENV to webpack, in order to use `process.env.NODE_ENV`
+    new webpack.NamedModulesPlugin(),
+  ])
+  .concat(options.definePlugin || [
+  // Always expose NODE_ENV to webpack, in order to use `process.env.NODE_ENV`
     // inside your code for any environment checks; UglifyJS will automatically
     // drop any unreachable code.
     new webpack.DefinePlugin({
       'process.env': {
         NODE_ENV: JSON.stringify(process.env.NODE_ENV),
+        ISOMORPHIC: JSON.stringify(process.env.ISOMORPHIC),
       },
     }),
-    new webpack.NamedModulesPlugin(),
   ]),
   resolve: {
     // 使得可以直接导入app目录下的模块
@@ -104,6 +125,7 @@ module.exports = options => ({
   devtool: options.devtool,
   target: options.target || 'web', // Make web variables accessible to webpack, e.g. window
   performance: options.performance || {},
+  node: options.node,
   stats: Object.assign({
     colors: true,
     timings: true,

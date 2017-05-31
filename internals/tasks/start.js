@@ -20,7 +20,7 @@ const app = express();
 
 module.exports = async function start () {
   await run(clean)
-  return new Promise((resolve, reject) => {
+  return new Promise(resolve => {
     function beforeHtml5Fallback () {
       // setup proxy
       if (pkg.proxy) {
@@ -65,7 +65,7 @@ module.exports = async function start () {
     app.listen(port, host, err => {
       if (err) {
         logger.error(err.message);
-        reject(err)
+        throw err
       }
 
       // Connect to ngrok in dev mode

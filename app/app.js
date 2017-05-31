@@ -12,7 +12,7 @@ import 'babel-polyfill';
 import React from 'react';
 import ReactDOM from 'react-dom';
 import { Provider } from 'react-redux';
-import { applyRouterMiddleware, Router } from 'react-router';
+import { applyRouterMiddleware, Router, match } from 'react-router';
 import { syncHistoryWithStore } from 'react-router-redux';
 import { useScroll } from 'react-router-scroll';
 import { ThemeProvider } from 'styled-components'
@@ -55,7 +55,7 @@ import browserHistory from './history'
 // this uses the singleton browserHistory provided by react-router
 // Optionally, this could be changed to leverage a created history
 // e.g. `const browserHistory = useRouterHistory(createBrowserHistory)();`
-const initialState = {};
+const initialState = window.__INIT_STATE__ || {}
 const store = configureStore(initialState, browserHistory);
 store.runSaga(saga)
 
@@ -67,31 +67,34 @@ const history = syncHistoryWithStore(browserHistory, store, {
 });
 
 // Set up the router, wrapping all Routes in the App component
-const rootRoute = {
+const routes = {
   component: App,
   childRoutes: createRoutes(store),
 };
 
 const render = messages => {
-  ReactDOM.render(
-    <Provider store={store}>
-      <LanguageProvider messages={messages}>
-        <ThemeProvider theme={theme}>
-          <Router
-            history={history}
-            routes={rootRoute}
-            render={
-              // Scroll to top when going to a new page, imitating default browser
-              // behaviour
-              applyRouterMiddleware(useScroll())
-            }
-          />
-        </ThemeProvider>
-      </LanguageProvider>
-    </Provider>,
-    document.getElementById('app')
-  );
-};
+  match({ history: browserHistory, routes }, (error, redirectLocation, renderProps) => {
+    ReactDOM.render(
+      <Provider store={store}>
+        <LanguageProvider messages={messages}>
+          <ThemeProvider theme={theme}>
+            <Router
+              routes={routes}
+              history={history}
+              matchContext={renderProps.matchContext}
+              render={
+                // Scroll to top when going to a new page, imitating default browser
+                // behaviour
+                applyRouterMiddleware(useScroll())
+              }
+            />
+          </ThemeProvider>
+        </LanguageProvider>
+      </Provider>,
+      document.getElementById('app')
+    )
+  })
+}
 
 // Hot reloadable translation json files
 if (module.hot) {

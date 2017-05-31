@@ -1,31 +1,27 @@
 const path = require('path')
+const chalk = require('chalk')
 const webpack = require('webpack')
 const webpackDevMiddleware = require('webpack-dev-middleware')
 const webpackHotMiddleware = require('webpack-hot-middleware')
 const WriteFileWebpackPlugin = require('write-file-webpack-plugin')
-const argv = require('minimist')(process.argv.slice(2));
 const express = require('express')
 const setupProxy = require('../../middlewares/proxy')
 const setupFrontEndMiddleware = require('../../middlewares/frontend')
 const clientConfig = require('../../webpack/webpack.dev.babel')
 const serverConfig = require('../../webpack/webpack.ssr.babel')
 const logger = require('../../utils/logger');
+const choosePort = require('../../utils/choosePort')
 const pkg = require(path.resolve(process.cwd(), 'package.json'))
 const run = require('../run')
 const clean = require('../clean')
 const runServer = require('./runServer')
 
 const webpackConfig = [clientConfig, serverConfig]
-
 const app = express()
-const port = argv.port || process.env.PORT || 3000;
-const customHost = argv.host || process.env.HOST;
-const host = customHost || null; // Let http.Server use its default IPv6/4 host
-const prettyHost = customHost || 'localhost';
 
 module.exports = async function start () {
   await run(clean)
-  await new Promise((resolve, reject) => {
+  await new Promise(resolve => {
     // 输出到文件系统，这样才可以被执行
     serverConfig.plugins.push(new WriteFileWebpackPlugin({ log: false }))
 
@@ -61,10 +57,16 @@ module.exports = async function start () {
           target: server.target,
         },
       })
+
+      const availablePortAndHost = await choosePort()
+      if (availablePortAndHost === null) throw new Error(`${chalk.bgRed('[Dev Server]')}: Setup failed. Port in used`)
+      const { port, host, prettyHost } = availablePortAndHost
+
       // finished
       app.listen(port, host, err => {
         if (err) {
-          reject(err)
+          logger.error(err)
+          throw err
         }
         logger.appStarted(port, prettyHost);
         resolve()

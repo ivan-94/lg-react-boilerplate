@@ -31,8 +31,8 @@ export default function createRoutes (store) {
       },
     }, {
       path: '*',
-      name: 'notfound',
-      getComponent(nextState, cb) {
+      name: 'notFound',
+      getComponent (nextState, cb) {
         loadStandaloneComponent(import('containers/NotFoundPage'), cb)
       },
     },
