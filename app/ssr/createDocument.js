@@ -8,12 +8,11 @@ import config from '../../internals/config'
 
 const indexHtml = fs.readFileSync(path.join(config.outputPath, 'index.html'))
 
-export default function createDocument (renderedString, store) {
+export default function createDocument (before, renderedString, after) {
   const $ = cheerio.load(indexHtml)
   $('#app')
+  .before(before.join(' '))
   .html(renderedString)
-  .after(
-    `<script type="text/javascript">window.__INIT_STATE__ = ${JSON.stringify(store.getState())}</script>`
-  )
+  .after(after.join(' '))
   return $.html()
 }

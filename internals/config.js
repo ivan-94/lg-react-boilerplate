@@ -40,6 +40,7 @@ const ReactBoilerplate = {
         'source-map-support',
         'inquirer',
         'morgan',
+        'svg-sprite-loader',
       ],
 
       /**

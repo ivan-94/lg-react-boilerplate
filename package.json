@@ -281,6 +281,7 @@
     "sanitize.css": "4.1.0",
     "source-map-support": "^0.4.15",
     "styled-components": "^1.4.4",
+    "svg-sprite-loader": "^2.0.0",
     "warning": "3.0.0",
     "whatwg-fetch": "2.0.1"
   },
@@ -350,7 +351,6 @@
     "shelljs": "0.7.5",
     "sinon": "2.0.0-pre",
     "style-loader": "0.13.1",
-    "svg-sprite-loader": "^2.0.0",
     "svgo-loader": "^1.2.1",
     "url-loader": "0.5.7",
     "webpack": "2.5.1",
