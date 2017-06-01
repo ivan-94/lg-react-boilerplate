@@ -5,7 +5,7 @@
 import { createStore, applyMiddleware, compose } from 'redux';
 import { fromJS } from 'immutable';
 import { routerMiddleware } from 'react-router-redux';
-import createSagaMiddleware from 'redux-saga';
+import createSagaMiddleware, { END } from 'redux-saga';
 import createReducer from './reducers';
 
 const sagaMiddleware = createSagaMiddleware();
@@ -39,9 +39,19 @@ export default function configureStore (initialState = {}, history) {
   );
 
   // Extensions
-  store.runSaga = sagaMiddleware.run;
   store.asyncReducers = {}; // Async reducer registry
   store.asyncSagaMap = {}  // Async saga registry
+  store._task = []
+  // if all saga done, it will be resolve. for Server side rendering
+  store.done = Promise.resolve()
+  // notify all sagas to stop watch any Action. for Server side rendering
+  store.end = () => store.dispatch(END)
+  store.runSaga = function runSaga (saga) {
+    const task = sagaMiddleware.run(saga)
+    store._task.push(task)
+    store.done = Promise.all(store._task.map(t => t.done))
+    return task
+  }
 
   // Make reducers hot reloadable, see http://mxs.is/googmo
   /* istanbul ignore next */

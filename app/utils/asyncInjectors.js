@@ -27,7 +27,7 @@ export function injectAsyncReducer (store: StoreType) {
 export function injectAsyncSagas (store: StoreType) {
   return function injectSagas (name: string, sagas: Array<Function> | Function) {
     if (Reflect.has(store.asyncSagaMap, name)) return
-    store.asyncSagaMap[name] = true // eslint-disable-line no-param-reassign
+    store.asyncSagaMap[name] = sagas // eslint-disable-line no-param-reassign
     if (Array.isArray(sagas)) {
       sagas.map(store.runSaga);
     } else {

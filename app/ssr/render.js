@@ -1,5 +1,5 @@
 import React from 'react'
-import { renderToString } from 'react-dom/server'
+import { renderToString, renderToStaticMarkup } from 'react-dom/server'
 import { Provider } from 'react-redux'
 import { ThemeProvider, ServerStyleSheet } from 'styled-components'
 import { RouterContext } from 'react-router'
@@ -9,12 +9,14 @@ import createDocument from './createDocument'
 import { translationMessages } from '../i18n';
 import theme from '../theme'
 import saga from '../saga'
+import '../global-styles'
 
-export default function render (store, renderProps) {
+export default async function render (store, renderProps) {
   // collect styled-components styles
   const sheet = new ServerStyleSheet()
-  const spriteContent = sprite.stringify()
+  // run root saga
   store.runSaga(saga)
+
   const Component = (
     <Provider store={store}>
       <LanguageProvider messages={translationMessages}>
@@ -24,8 +26,16 @@ export default function render (store, renderProps) {
       </LanguageProvider>
     </Provider>
   )
+  // trigger all async actions
+  renderToStaticMarkup(Component)
+  // stop watch ACTIONS immediately
+  store.end()
 
+  // all async actions done
+  await store.done
+  // start real rendering
   const renderedString = renderToString(sheet.collectStyles(Component))
+  const spriteContent = sprite.stringify()
   const css = sheet.getStyleTags()
 
   return createDocument(

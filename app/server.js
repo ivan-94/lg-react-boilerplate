@@ -34,14 +34,15 @@ app.use((req, res) => {
     childRoutes: createRoutes(store),
   }
 
-  match({ history, routes, location: req.url }, (error, redirectLocation, renderProps) => {
+  match({ history, routes, location: req.url }, async (error, redirectLocation, renderProps) => {
     if (error) {
       res.status(500).send(error.message)
     } else if (redirectLocation) {
       res.redirect(302, `${redirectLocation.pathname}${redirectLocation.search}`)
     } else if (renderProps) {
       const notFound = renderProps.routes.some(route => route.path === '*')
-      res.status(notFound ? 404 : 200).send(render(store, renderProps))
+      const output = await render(store, renderProps)
+      res.status(notFound ? 404 : 200).send(output)
     }
   })
 })
@@ -66,7 +67,5 @@ app.listen(port, host, err => {
         target: `http://${prettyHost}:${port}`,
       },
     })
-
-    process.send('hello')
   }
 })
