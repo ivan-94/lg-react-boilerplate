@@ -3,6 +3,7 @@ import { renderToString, renderToStaticMarkup } from 'react-dom/server'
 import { Provider } from 'react-redux'
 import { ThemeProvider, ServerStyleSheet } from 'styled-components'
 import { RouterContext } from 'react-router'
+import Helmet from 'react-helmet'
 import sprite from 'svg-sprite-loader/runtime/sprite.build'
 import LanguageProvider from 'containers/LanguageProvider';
 import createDocument from './createDocument'
@@ -37,20 +38,22 @@ export default async function render (store, renderProps) {
   const renderedString = renderToString(sheet.collectStyles(Component))
   const spriteContent = sprite.stringify()
   const css = sheet.getStyleTags()
+  const helmet = Helmet.renderStatic()
 
-  return createDocument(
-    // head
-    [
+  return createDocument({
+    helmet,
+    // static head tags
+    head: [
       css,
     ],
-    // before
-    [
+    // before mount Node
+    before: [
       spriteContent,
     ],
     renderedString,
-    // after
-    [
+    // after mount Node
+    after: [
       `<script type="text/javascript">window.__INIT_STATE__ = ${JSON.stringify(store.getState())}</script>`,
-    ]
-  )
+    ],
+  })
 }
