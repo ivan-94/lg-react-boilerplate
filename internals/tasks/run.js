@@ -11,7 +11,7 @@ function run (fn, options) {
   const task = typeof fn.default === 'undefined' ? fn : fn.default
   const start = new Date()
   console.log(
-    `[${chalk.green(formatTime(start))}] Starting: ${task.name} ${options || ''}`
+    `⌛️ [${chalk.green(formatTime(start))}] Starting: ${task.name} ${options || ''}`
   )
 
   return task(options)
@@ -19,7 +19,7 @@ function run (fn, options) {
     const end = new Date()
     const time = end.getTime() - start.getTime()
     console.log(
-      `[${chalk.green(formatTime(end))}] Finished: ${task.name} ${options || ''} -- ${time}ms`
+      `✅ [${chalk.green(formatTime(end))}] Finished: ${task.name} ${options || ''} -- ${time}ms`
     )
     return resolution
   })

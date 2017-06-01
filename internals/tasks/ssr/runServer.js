@@ -11,12 +11,12 @@ module.exports = async function runServer () {
   return new Promise(resolve => {
     if (server) {
       console.log(
-        `${chalk.blue('[Server Runner]')}: restarting server.`
+        `⌛️ ${chalk.blue('[Server Runner]')}: restarting server.`
       )
       server.kill()
     } else {
       console.log(
-        `${chalk.blue('[Server Runner]')}: setuping server.`
+        `⌛️ ${chalk.blue('[Server Runner]')}: setuping server.`
       )
     }
 
@@ -34,12 +34,12 @@ module.exports = async function runServer () {
         server.target = message.payload.target
         pending = false
         console.log(
-          `${chalk.blue('[Server Runner]')}: Server setup on ${chalk.yellow(server.target)}.`
+          `✅ ${chalk.blue('[Server Runner]')}: Server setup on ${chalk.yellow(server.target)}.`
         )
         resolve(server)
       } else {
         console.log(
-          `${chalk.blue('[Server Runner]')}: received message from server: ${chalk.bgWhite.black(JSON.stringify(message))}.`
+          `✉️ ${chalk.blue('[Server Runner]')}: received message from server: ${chalk.bgWhite.black(JSON.stringify(message))}.`
         )
       }
     })

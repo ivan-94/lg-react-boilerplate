@@ -15,30 +15,41 @@ export type ProxyOptions = {
     secure: boolean,
     xfwd: boolean,
     [option]: any,
+    // fallback， when proxy error
+    fallback?: (err: Error, req: express$Request, res: express$Response) => void,
   }
 }
 
 function onProxyError (options: ProxyOptions) {
   return (err, req, res) => {
+    // fallback
+    if (options.options.fallback) {
+      console.log(
+`⚠️ ${chalk.yellow('[Proxy Fallback]')}: Proxy Target temporary unavailable, use fallback for ${chalk.cyan(req.url)}
+`)
+      return options.options.fallback(err, req, res)
+    }
+
     const host = req.headers && req.headers.host;
     const target = JSON.stringify(options.options.target)
+
     console.log(
-`${chalk.red('[Proxy error]')}: Could not proxy request ${chalk.cyan(req.url)}
+`❌ ${chalk.red('[Proxy error]')}: Could not proxy request ${chalk.cyan(req.url)}
  from ${chalk.cyan(host)} to ${chalk.cyan(target)}.
  Error Code: ${chalk.cyan(err.code)}.
-`
-    )
+`)
     // And immediately send the proper error response to the client.
     // Otherwise, the request will eventually timeout with ERR_EMPTY_RESPONSE on the client side.
     if (res.writeHead && !res.headersSent) {
       res.writeHead(500);
     }
     res.end(`[Proxy error]: Could not proxy request ${req.url} from ${host} to ${target} (${err.code}).`)
+    return null
   }
 }
 
 module.exports = function setupProxy (app, options: ProxyOptions) {
-  // 🚧 下面情况排除代理:
+  // TODO 🚧 下面情况排除代理:
   // - /index.html (served as HTML5 history API fallback)
   // - /*.hot-update.json (WebpackDevServer uses this too for hot reloading)
   // - /sockjs-node/* (WebpackDevServer uses this for hot reloading)
@@ -73,7 +84,7 @@ module.exports = function setupProxy (app, options: ProxyOptions) {
   const hpm = httpProxyMiddleware(options.context, options.options)
   const from = options.path || (typeof options.context === 'function' ? 'Unknown' : options.context)
   console.log(
-    `${chalk.green('[Proxy]')}: ${from} ${chalk.blue('->')} ${JSON.stringify(orgTarget)}`
+    `✅ ${chalk.green('[Proxy]')}: ${from} ${chalk.blue('->')} ${JSON.stringify(orgTarget)}`
   )
   const path = options.path instanceof RegExp ? options.path : RegExp(options.path)
   app.use(path, hpm);

@@ -50,13 +50,13 @@ app.use((req, res) => {
 app.listen(port, host, err => {
   if (err) {
     console.log(
-      `${chalk.red('[Server]')}: Fail to setup ssrServer.\n ${err}`
+      `❌ ${chalk.red('[Server]')}: Fail to setup ssrServer.\n ${err}`
     )
     return
   }
 
   console.log(
-    `${chalk.green('[Server]')}: ssrServer success on ${chalk.yellow(`http://${prettyHost}:${port}`)}.`
+    `✅ ${chalk.green('[Server]')}: ssrServer success on ${chalk.yellow(`http://${prettyHost}:${port}`)}.`
   )
 
   if (process.send) {
