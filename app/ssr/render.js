@@ -14,7 +14,6 @@ import '../global-styles'
 
 export default async function render (store, renderProps) {
   // collect styled-components styles
-  const sheet = new ServerStyleSheet()
   // run root saga
   store.runSaga(saga)
 
@@ -35,6 +34,7 @@ export default async function render (store, renderProps) {
   // all async actions done
   await store.done
   // start real rendering
+  const sheet = new ServerStyleSheet()
   const renderedString = renderToString(sheet.collectStyles(Component))
   const spriteContent = sprite.stringify()
   const css = sheet.getStyleTags()

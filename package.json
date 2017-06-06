@@ -84,14 +84,20 @@
     "plugins": [
       "syntax-flow",
       "polished",
-      [
-        "import",
-        {
-          "libraryName": "antd-mobile"
-        }
-      ]
+      ["styled-components", {
+        "ssr": true,
+        "displayName": false,
+        "minify": true
+      }]
     ],
     "env": {
+      "development": {
+        "plugins": [
+          ["styled-components", {
+            "displayName": true
+          }]
+        ]
+      },
       "production": {
         "only": [
           "app"
@@ -297,6 +303,7 @@
     "babel-plugin-polished": "^1.0.3",
     "babel-plugin-react-intl": "2.2.0",
     "babel-plugin-react-transform": "2.0.2",
+    "babel-plugin-styled-components": "^1.1.4",
     "babel-plugin-syntax-flow": "^6.18.0",
     "babel-plugin-transform-es2015-modules-commonjs": "6.18.0",
     "babel-plugin-transform-flow-strip-types": "^6.22.0",
