@@ -37,9 +37,9 @@
     "generate": "plop --plopfile internals/generators/index.js",
     "flow": "flow",
     "flowinstall": "flow-typed install",
-    "lint": "npm run lint:js",
-    "lint:eslint": "eslint --ignore-path .gitignore --ignore-pattern internals/scripts",
-    "lint:js": "npm run lint:eslint -- . ",
+    "lint": "npm run lint:css && npm run lint:js",
+    "lint:js": "eslint --ignore-path .gitignore --ignore-pattern internals/scripts .",
+    "lint:css": "stylelint './app/components/**/*.js' './app/containers/**/*.js'",
     "lint:staged": "lint-staged",
     "pretest": "npm run test:clean && npm run lint",
     "test:clean": "rimraf ./coverage",
@@ -121,6 +121,11 @@
         ]
       }
     }
+  },
+  "stylelint": {
+    "extends": "stylelint-config-standard",
+    "processors": ["stylelint-processor-styled-components"],
+    "syntax": "scss"
   },
   "eslintConfig": {
     "parser": "babel-eslint",
@@ -365,6 +370,9 @@
     "shelljs": "0.7.5",
     "sinon": "2.0.0-pre",
     "style-loader": "0.13.1",
+    "stylelint": "^7.10.1",
+    "stylelint-config-standard": "^16.0.0",
+    "stylelint-processor-styled-components": "^0.1.0",
     "svgo-loader": "^1.2.1",
     "url-loader": "0.5.7",
     "webpack": "2.5.1",
