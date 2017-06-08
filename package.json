@@ -84,18 +84,24 @@
     "plugins": [
       "syntax-flow",
       "polished",
-      ["styled-components", {
-        "ssr": true,
-        "displayName": false,
-        "minify": true
-      }]
+      [
+        "styled-components",
+        {
+          "ssr": true,
+          "displayName": false,
+          "minify": true
+        }
+      ]
     ],
     "env": {
       "development": {
         "plugins": [
-          ["styled-components", {
-            "displayName": true
-          }]
+          [
+            "styled-components",
+            {
+              "displayName": true
+            }
+          ]
         ]
       },
       "production": {
@@ -269,6 +275,7 @@
     "intl": "1.2.5",
     "invariant": "^2.2.2",
     "ip": "1.1.4",
+    "lg-react-mounter": "^0.2.1",
     "lodash": "4.17.2",
     "minimist": "1.2.0",
     "morgan": "^1.8.2",

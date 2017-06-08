@@ -41,6 +41,7 @@ const ReactBoilerplate = {
         'inquirer',
         'morgan',
         'svg-sprite-loader',
+        'lg-react-mounter',
       ],
 
       /**

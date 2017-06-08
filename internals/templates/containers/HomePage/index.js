@@ -11,6 +11,9 @@ import injectHomePage from './injectHomePage'
 import appleIcon from './social-apple.svg'
 
 class HomePage extends React.PureComponent { // eslint-disable-line react/prefer-stateless-function
+  // not async action need to trigger in children, so we omit to render children
+  // speed up ReactMounter
+  shouldOmitChildren = true
   render () {
     return (<div>
       <Helmet>

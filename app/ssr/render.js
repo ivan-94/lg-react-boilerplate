@@ -1,5 +1,6 @@
 import React from 'react'
-import { renderToString, renderToStaticMarkup } from 'react-dom/server'
+import { renderToString } from 'react-dom/server'
+import ReactMounter from 'lg-react-mounter'
 import { Provider } from 'react-redux'
 import { ThemeProvider, ServerStyleSheet } from 'styled-components'
 import { RouterContext } from 'react-router'
@@ -27,7 +28,7 @@ export default async function render (store, renderProps) {
     </Provider>
   )
   // trigger all async actions
-  renderToStaticMarkup(Component)
+  ReactMounter.render(Component)
   // stop watch ACTIONS immediately
   store.end()
 

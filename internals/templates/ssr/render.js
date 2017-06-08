@@ -1,5 +1,6 @@
 import React from 'react'
-import { renderToString, renderToStaticMarkup } from 'react-dom/server'
+import { renderToString } from 'react-dom/server'
+import ReactMounter from 'lg-react-mounter'
 import { Provider } from 'react-redux'
 import { ThemeProvider, ServerStyleSheet } from 'styled-components'
 import { RouterContext } from 'react-router'
@@ -14,7 +15,6 @@ import '../global-styles'
 
 export default async function render (store, renderProps) {
   // collect styled-components styles
-  const sheet = new ServerStyleSheet()
   // run root saga
   store.runSaga(saga)
 
@@ -28,13 +28,14 @@ export default async function render (store, renderProps) {
     </Provider>
   )
   // trigger all async actions
-  renderToStaticMarkup(Component)
+  ReactMounter.render(Component)
   // stop watch ACTIONS immediately
   store.end()
 
   // all async actions done
   await store.done
   // start real rendering
+  const sheet = new ServerStyleSheet()
   const renderedString = renderToString(sheet.collectStyles(Component))
   const spriteContent = sprite.stringify()
   const css = sheet.getStyleTags()

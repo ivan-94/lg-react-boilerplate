@@ -21,6 +21,7 @@ const Code = styled.h2`
 `
 
 export default class NotFound extends React.PureComponent { // eslint-disable-line react/prefer-stateless-function
+  shouldOmitChildren = true
   render () {
     return (
       <div>
