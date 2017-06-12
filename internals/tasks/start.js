@@ -1,7 +1,7 @@
 /* eslint consistent-return:0 */
 
-const express = require('express');
-const logger = require('../utils/logger');
+const express = require('express')
+const logger = require('../utils/logger')
 const webpack = require('webpack')
 const webpackDevMiddleware = require('webpack-dev-middleware')
 const webpackHotMiddleware = require('webpack-hot-middleware')
@@ -10,18 +10,20 @@ const pkg = require(path.resolve(process.cwd(), 'package.json'))
 const run = require('./run')
 const clean = require('./clean')
 
-const argv = require('minimist')(process.argv.slice(2));
-const setup = require('../middlewares/frontend');
+const argv = require('minimist')(process.argv.slice(2))
+const setup = require('../middlewares/frontend')
 const setupProxy = require('../middlewares/proxy')
 const webpackConfig = require('../webpack/webpack.dev.babel')
-const isDev = process.env.NODE_ENV !== 'production';
-const ngrok = (isDev && process.env.ENABLE_TUNNEL) || argv.tunnel ? require('ngrok') : false;
-const app = express();
+const isDev = process.env.NODE_ENV !== 'production'
+const ngrok = (isDev && process.env.ENABLE_TUNNEL) || argv.tunnel
+  ? require('ngrok')
+  : false
+const app = express()
 
-module.exports = async function start () {
+module.exports = async function start() {
   await run(clean)
   return new Promise(resolve => {
-    function beforeHtml5Fallback () {
+    function beforeHtml5Fallback() {
       // setup proxy
       if (pkg.proxy) {
         setupProxy(app, pkg.proxy)
@@ -53,18 +55,17 @@ module.exports = async function start () {
       })
     }
 
-
     // get the intended host and port number, use localhost and port 3000 if not provided
-    const customHost = argv.host || process.env.HOST;
-    const host = customHost || null; // Let http.Server use its default IPv6/4 host
-    const prettyHost = customHost || 'localhost';
+    const customHost = argv.host || process.env.HOST
+    const host = customHost || null // Let http.Server use its default IPv6/4 host
+    const prettyHost = customHost || 'localhost'
 
-    const port = argv.port || process.env.PORT || 3000;
+    const port = argv.port || process.env.PORT || 3000
 
     // Start your app.
     app.listen(port, host, err => {
       if (err) {
-        logger.error(err.message);
+        logger.error(err.message)
         throw err
       }
 
@@ -72,13 +73,13 @@ module.exports = async function start () {
       if (ngrok) {
         ngrok.connect(port, (innerErr, url) => {
           if (innerErr) {
-            return logger.error(innerErr);
+            return logger.error(innerErr)
           }
 
-          logger.appStarted(port, prettyHost, url);
-        });
+          logger.appStarted(port, prettyHost, url)
+        })
       } else {
-        logger.appStarted(port, prettyHost);
+        logger.appStarted(port, prettyHost)
       }
       resolve()
     })

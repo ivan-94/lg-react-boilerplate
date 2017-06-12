@@ -51,7 +51,7 @@
     "ssr:start": "cross-env NODE_ENV=development ISOMORPHIC=true babel-node internals/tasks/run ssr/start"
   },
   "lint-staged": {
-    "*.js": "prettier"
+    "*.js": ["npm run prettier", "git add"]
   },
   "pre-commit": "lint:staged",
   "proxy": {
@@ -162,10 +162,6 @@
       ],
       "no-underscore-dangle": 0,
       "no-unused-expressions": 0,
-      "space-before-function-paren": [
-        "error",
-        "always"
-      ],
       "arrow-body-style": [
         2,
         "as-needed"

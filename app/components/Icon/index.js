@@ -10,12 +10,18 @@ const Svg = styled.svg`
   vertical-align: middle;
 `
 
-export default function Icon (props: {
+export default function Icon(props: {
   src: SpriteSymbol,
   fill?: string,
   className?: string,
 }) {
-  return (<Svg className={props.className} fill={props.fill} viewBox={props.src.viewBox}>
-    <use xlinkHref={`#${props.src.id}`} />
-  </Svg>)
+  return (
+    <Svg
+      className={props.className}
+      fill={props.fill}
+      viewBox={props.src.viewBox}
+    >
+      <use xlinkHref={`#${props.src.id}`} />
+    </Svg>
+  )
 }

@@ -1,6 +1,6 @@
 // @flow
 import identity from 'lodash/identity'
-export function createAction (
+export function createAction(
   type: string,
   payloadCreator: Function = identity,
   metaCreator?: Function

@@ -61,15 +61,19 @@ import { getAsyncInjectors } from './asyncInjectors'
  * @param  {Object} options 配置
  * @return {Object}        注入器
  */
-export default function generateHelpers (store: $Subtype<Store<*, *>>, options: {
-  componentWillLoad?: (Store<*, *>) => void,
-  componentDidLoad?: (Store<*, *>, component: any) => void,
-  onError?: (err: any) => void,
-} = {}) {
+export default function generateHelpers(
+  store: $Subtype<Store<*, *>>,
+  options: {
+    componentWillLoad?: (Store<*, *>) => void,
+    componentDidLoad?: (Store<*, *>, component: any) => void,
+    onError?: (err: any) => void,
+  } = {}
+) {
   // $FlowFixMe
-  options = { // eslint-disable-line
-    onError (err) {
-      console.error('Dynamic page loading failed', err); // eslint-disable-line no-console
+  options = {
+    // eslint-disable-line
+    onError(err) {
+      console.error('Dynamic page loading failed', err) // eslint-disable-line no-console
     },
     ...options,
   }
@@ -77,34 +81,35 @@ export default function generateHelpers (store: $Subtype<Store<*, *>>, options: 
   const { injectReducer, injectSagas } = getAsyncInjectors(store)
   // getComponent
   const loadModule = (cb: Function) => (componentModule: any) => {
-    if (typeof options.componentDidLoad === 'function') options.componentDidLoad(store, componentModule)
-    cb(null, componentModule.default || componentModule);
+    if (typeof options.componentDidLoad === 'function')
+      options.componentDidLoad(store, componentModule)
+    cb(null, componentModule.default || componentModule)
   }
 
   // getIndexRoute
   const loadIndexModule = (cb: Function) => (componentModule: any) => {
-    if (typeof options.componentDidLoad === 'function') options.componentDidLoad(store, componentModule)
+    if (typeof options.componentDidLoad === 'function')
+      options.componentDidLoad(store, componentModule)
     cb(null, {
       component: componentModule.default || componentModule,
     })
   }
 
-  function loadStandaloneComponent (result: Promise<any>, cb: Function) {
-    if (typeof options.componentWillLoad === 'function') options.componentWillLoad(store)
-    return result
-    .then(loadModule(cb))
-    .catch(options.onError)
+  function loadStandaloneComponent(result: Promise<any>, cb: Function) {
+    if (typeof options.componentWillLoad === 'function')
+      options.componentWillLoad(store)
+    return result.then(loadModule(cb)).catch(options.onError)
   }
 
-  function loadStandaloneIndexComponent (result: Promise<any>, cb: Function) {
-    if (typeof options.componentWillLoad === 'function') options.componentWillLoad(store)
-    return result
-    .then(loadIndexModule(cb))
-    .catch(options.onError)
+  function loadStandaloneIndexComponent(result: Promise<any>, cb: Function) {
+    if (typeof options.componentWillLoad === 'function')
+      options.componentWillLoad(store)
+    return result.then(loadIndexModule(cb)).catch(options.onError)
   }
 
-  function loadComponent (result: Promise<[any, any, any]>, cb: Function) {
-    if (typeof options.componentWillLoad === 'function') options.componentWillLoad(store)
+  function loadComponent(result: Promise<[any, any, any]>, cb: Function) {
+    if (typeof options.componentWillLoad === 'function')
+      options.componentWillLoad(store)
     return result
       .then(([component, reducer, saga]) => {
         const nameSpace = reducer.default.nameSpace
@@ -115,8 +120,9 @@ export default function generateHelpers (store: $Subtype<Store<*, *>>, options: 
       .catch(options.onError)
   }
 
-  function loadIndexComponent (result: Promise<[any, any, any]>, cb: Function) {
-    if (typeof options.componentWillLoad === 'function') options.componentWillLoad(store)
+  function loadIndexComponent(result: Promise<[any, any, any]>, cb: Function) {
+    if (typeof options.componentWillLoad === 'function')
+      options.componentWillLoad(store)
     return result
       .then(([component, reducer, saga]) => {
         const nameSpace = reducer.default.nameSpace

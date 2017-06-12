@@ -1,10 +1,10 @@
 // Important modules this config uses
-const path = require('path');
-const webpack = require('webpack');
-const HtmlWebpackPlugin = require('html-webpack-plugin');
+const path = require('path')
+const webpack = require('webpack')
+const HtmlWebpackPlugin = require('html-webpack-plugin')
 const AssetsPlugin = require('assets-webpack-plugin')
 const FaviconsWebpackPlugin = require('favicons-webpack-plugin')
-const OfflinePlugin = require('offline-plugin');
+const OfflinePlugin = require('offline-plugin')
 const determineFile = require('./helpers').determineFile
 
 module.exports = require('./webpack.base.babel')({
@@ -95,6 +95,7 @@ module.exports = require('./webpack.base.babel')({
   ],
 
   performance: {
-    assetFilter: assetFilename => !(/(\.map$)|(^(main\.|favicon\.))/.test(assetFilename)),
+    assetFilter: assetFilename =>
+      !/(\.map$)|(^(main\.|favicon\.))/.test(assetFilename),
   },
-});
+})

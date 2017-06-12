@@ -1,20 +1,13 @@
 // @flow
 import { fromJS, Map } from 'immutable'
-import {
-  nameSpace,
-  INCREMENT,
-  DECREMENT,
-} from './constants'
+import { nameSpace, INCREMENT, DECREMENT } from './constants'
 
 // 初始state
 const initialState = fromJS({
   count: 0,
 })
 
-function reducer (
-  state: Map<*, *> = initialState,
-  action: Redux$Action,
-) {
+function reducer(state: Map<*, *> = initialState, action: Redux$Action) {
   switch (action.type) {
     case INCREMENT:
       return state.set('count', state.get('count') + 1)

@@ -43,7 +43,7 @@ module.exports = require('./webpack.base.babel')({
     (context, request, callback) => {
       let isExternal =
         request.match(/^[@a-z][a-z/.\-0-9]*$/i) &&
-        !request.match(/\.(css|less|scss|sss)$/i);
+        !request.match(/\.(css|less|scss|sss)$/i)
       if (isExternal) {
         try {
           require.resolve(request)

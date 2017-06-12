@@ -5,13 +5,8 @@
  */
 import React from 'react'
 import { connect } from 'react-redux'
-import {
-  increment,
-  decrement,
-} from './actions'
-import {
-  selectCount,
-} from './selectors'
+import { increment, decrement } from './actions'
+import { selectCount } from './selectors'
 
 /**
  * 注入容器
@@ -19,7 +14,10 @@ import {
  * @param  {Object} optionsOrPassThroughProps 注入器的配置选项或者直接传递给被装饰组件的props
  * @return {ReactComponent}                           返回一个容器组件
  */
-export default function injectHomePage (Component, optionsOrPassThroughProps: Object = {}) {
+export default function injectHomePage(
+  Component,
+  optionsOrPassThroughProps: Object = {}
+) {
   // 容器
   class HomePageContainer extends React.PureComponent {
     // 1⃣️ : 负责事件处理
@@ -29,13 +27,15 @@ export default function injectHomePage (Component, optionsOrPassThroughProps: Ob
     _handleDecrement = () => {
       this.props.dispatch(decrement())
     }
-    render () {
-      return (<Component
-        {...optionsOrPassThroughProps}
-        {...this.props}
-        onIncrement={this._handleIncrement}
-        onDecrement={this._handleDecrement}
-      />)
+    render() {
+      return (
+        <Component
+          {...optionsOrPassThroughProps}
+          {...this.props}
+          onIncrement={this._handleIncrement}
+          onDecrement={this._handleDecrement}
+        />
+      )
     }
   }
 

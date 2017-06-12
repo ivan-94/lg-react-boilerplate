@@ -1,6 +1,6 @@
 const rmdir = require('./helpers').rmdir
 
-module.exports = function clean () {
+module.exports = function clean() {
   return Promise.all([
     rmdir('build/*', {
       nosort: true,

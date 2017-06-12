@@ -4,11 +4,11 @@ const platformToExtension = config.platformToExtension
 const platform = process.env.PLATFORM
 const exts = platformToExtension[platform]
 
-exports.isMobile = function isMobile () {
+exports.isMobile = function isMobile() {
   return process.env.PLATFORM === 'mobile'
 }
 
-exports.determineExtensions = function determineExtensions () {
+exports.determineExtensions = function determineExtensions() {
   if (exts) {
     if (Array.isArray(exts)) {
       return exts.map(ext => `.${ext}.js`)
@@ -18,10 +18,15 @@ exports.determineExtensions = function determineExtensions () {
   return []
 }
 
-exports.determineFile = function determineFile (name, ext = '.js', checkExists = true) {
+exports.determineFile = function determineFile(
+  name,
+  ext = '.js',
+  checkExists = true
+) {
   if (exts) {
     if (Array.isArray(exts)) {
-      for (const item of exts) { // eslint-disable-line no-restricted-syntax
+      // eslint-disable-next-line no-restricted-syntax
+      for (const item of exts) {
         const fileName = `${name}.${item}${ext}`
         if (checkExists && fs.existsSync(fileName)) {
           return fileName
