@@ -32,7 +32,9 @@
     "ssr:start": "cross-env NODE_ENV=development ISOMORPHIC=true babel-node internals/tasks/run ssr/start",
     "ssr:build-client": "cross-env NODE_ENV=production ISOMORPHIC=true webpack --config internals/webpack/webpack.prod.babel.js --color -p --progress",
     "ssr:build-server": "cross-env NODE_ENV=production ISOMORPHIC=true webpack --config internals/webpack/webpack.ssr.babel.js --color --progress",
-    "ssr:build": "npm run ssr:build-client && npm run ssr:build-server",
+    "ssr:build": "npm run ssr:clean && npm run ssr:build-client && npm run ssr:build-server",
+    "ssr:render": "npm run ssr:build && babel-node internals/tasks/run ssr/render",
+    "serve": "babel-node internals/tasks/run serve",
     "presetup": "npm i chalk shelljs",
     "setup": "node ./internals/scripts/setup.js",
     "postsetup": "npm run build:dll",
@@ -281,6 +283,7 @@
     "intl": "1.2.5",
     "invariant": "^2.2.2",
     "ip": "1.1.4",
+    "isomorphic-fetch": "^2.2.1",
     "lg-react-mounter": "^0.2.1",
     "lodash": "4.17.2",
     "minimist": "1.2.0",
@@ -301,8 +304,7 @@
     "source-map-support": "^0.4.15",
     "styled-components": "^2.0.0",
     "svg-sprite-loader": "^2.0.0",
-    "warning": "3.0.0",
-    "whatwg-fetch": "2.0.1"
+    "warning": "3.0.0"
   },
   "devDependencies": {
     "assets-webpack-plugin": "^3.5.1",
@@ -380,6 +382,7 @@
     "webpack": "2.5.1",
     "webpack-dev-middleware": "1.10.2",
     "webpack-hot-middleware": "2.18.0",
+    "write": "^0.3.3",
     "write-file-webpack-plugin": "^4.0.2"
   }
 }

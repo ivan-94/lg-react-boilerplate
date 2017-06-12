@@ -6,7 +6,7 @@ const ReactBoilerplate = {
   // This refers to the react-boilerplate version this project is based on.
   version: '3.4.0',
   // webpack output path
-  outputPath: resolve(process.cwd(), 'build/public/assets'),
+  outputPath: resolve(process.cwd(), 'build/public/'),
   // webpack public path
   publicPath: '/assets/',
   // 不同平台业务逻辑是共享的，为了不同平台之间可以共享业务逻辑(特指redux部分), 我们使用不同的文件
@@ -16,6 +16,9 @@ const ReactBoilerplate = {
     mobile: ['mb', 'web'], // 可以是数组形式, 表示.mb.js, .web.js 优先级高于其他
     // native: 'nt',
   },
+
+  // prerender route: MUST start with '/'
+  prerenderRoutes: ['/', '/test'],
 
   /**
    * The DLL Plugin provides a dramatic speed increase to webpack build and hot module reloading

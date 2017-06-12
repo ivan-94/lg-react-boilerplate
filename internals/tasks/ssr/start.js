@@ -9,7 +9,7 @@ const setupProxy = require('../../middlewares/proxy')
 const setupFrontEndMiddleware = require('../../middlewares/frontend')
 const clientConfig = require('../../webpack/webpack.dev.babel')
 const serverConfig = require('../../webpack/webpack.ssr.babel')
-const logger = require('../../utils/logger');
+const logger = require('../../utils/logger')
 const choosePort = require('../../utils/choosePort')
 const pkg = require(path.resolve(process.cwd(), 'package.json'))
 const run = require('../run')
@@ -18,9 +18,13 @@ const runServer = require('./runServer')
 
 const webpackConfig = [clientConfig, serverConfig]
 const app = express()
-const staticHtmlPath = path.join(clientConfig.output.path, 'index.html')
+const staticHtmlPath = path.join(
+  clientConfig.output.path,
+  clientConfig.output.publicPath,
+  'index.html'
+)
 
-module.exports = async function start () {
+module.exports = async function start() {
   await run(clean)
   await new Promise(resolve => {
     // 输出到文件系统，这样才可以被执行
@@ -38,7 +42,8 @@ module.exports = async function start () {
     // 每次编译完成都会调用
     let handleCompileDone = async () => {
       // 重启服务器
-      handleCompileDone = stats => !stats.stats[1].compilation.errors.length && runServer()
+      handleCompileDone = stats =>
+        !stats.stats[1].compilation.errors.length && runServer()
       // 运行服务器
       const server = await runServer()
       // frontendMiddleware
@@ -56,14 +61,17 @@ module.exports = async function start () {
       setupProxy(app, {
         options: {
           target: server.target,
-          fallback (err, req, res) {
+          fallback(err, req, res) {
             res.sendFile(staticHtmlPath)
           },
         },
       })
 
       const availablePortAndHost = await choosePort()
-      if (availablePortAndHost === null) throw new Error(`${chalk.bgRed('[Dev Server]')}: Setup failed. Port in used`)
+      if (availablePortAndHost === null)
+        throw new Error(
+          `${chalk.bgRed('[Dev Server]')}: Setup failed. Port in used`
+        )
       const { port, host, prettyHost } = availablePortAndHost
 
       // finished
@@ -72,7 +80,7 @@ module.exports = async function start () {
           logger.error(err)
           throw err
         }
-        logger.appStarted(port, prettyHost);
+        logger.appStarted(port, prettyHost)
         resolve()
       })
     }

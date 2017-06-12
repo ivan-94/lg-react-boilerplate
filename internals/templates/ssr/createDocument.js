@@ -6,7 +6,9 @@ import fs from 'fs'
 import cheerio from 'cheerio'
 import config from '../../internals/config'
 
-const indexHtml = fs.readFileSync(path.join(config.outputPath, 'index.html'))
+const indexHtml = fs.readFileSync(
+  path.join(config.outputPath, config.publicPath, 'index.html')
+)
 
 function replaceWithHelmet($, helmet, tag) {
   const ele = $(tag)

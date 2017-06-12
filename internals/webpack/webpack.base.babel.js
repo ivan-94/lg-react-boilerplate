@@ -3,6 +3,7 @@
  */
 
 const webpack = require('webpack')
+const path = require('path')
 const ExtractTextPlugin = require('extract-text-webpack-plugin')
 const determineExtensions = require('./helpers').determineExtensions
 const config = require('../config')
@@ -13,7 +14,7 @@ module.exports = options => ({
   output: Object.assign(
     {
       // Compile into js/build.js
-      path: config.outputPath,
+      path: path.join(config.outputPath, config.publicPath),
       publicPath: config.publicPath,
     },
     options.output
@@ -102,7 +103,7 @@ module.exports = options => ({
       new ExtractTextPlugin('style.css'),
       new webpack.ProvidePlugin({
         // make fetch available
-        fetch: 'exports-loader?self.fetch!whatwg-fetch',
+        fetch: 'isomorphic-fetch',
       }),
       new webpack.NamedModulesPlugin(),
     ])
