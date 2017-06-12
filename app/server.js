@@ -1,6 +1,9 @@
+import 'babel-polyfill'
+import path from 'path'
 import morgan from 'morgan'
 import chalk from 'chalk'
 import express from 'express'
+import compression from 'compression'
 import minimist from 'minimist'
 import { match, createMemoryHistory } from 'react-router'
 import { syncHistoryWithStore } from 'react-router-redux'
@@ -20,6 +23,11 @@ const app = express()
 
 // logger
 app.use(morgan('combined'))
+
+app.use(compression({ threshold: 0 }))
+
+// static resources
+app.use(express.static(path.join(__dirname, './public')))
 
 app.use((req, res) => {
   const initialState = {}

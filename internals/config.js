@@ -1,12 +1,14 @@
-const resolve = require('path').resolve;
-const pullAll = require('lodash/pullAll');
-const uniq = require('lodash/uniq');
+const resolve = require('path').resolve
+const pullAll = require('lodash/pullAll')
+const uniq = require('lodash/uniq')
 
 const ReactBoilerplate = {
   // This refers to the react-boilerplate version this project is based on.
   version: '3.4.0',
   // webpack output path
   outputPath: resolve(process.cwd(), 'build/public/assets'),
+  // webpack public path
+  publicPath: '/assets/',
   // 不同平台业务逻辑是共享的，为了不同平台之间可以共享业务逻辑(特指redux部分), 我们使用不同的文件
   // 后缀来区分不同的平台，比如index.mb.js表示的是移动端的，index.native.js 表示的是原生平台的特定代码
   // 我们使用环境变量`PLATFORM`来指示平台环境的切换
@@ -54,17 +56,19 @@ const ReactBoilerplate = {
       path: resolve('../node_modules/react-boilerplate-dlls'),
     },
 
-    entry (pkg) {
-      const dependencyNames = Object.keys(pkg.dependencies);
-      const exclude = pkg.dllPlugin.exclude || ReactBoilerplate.dllPlugin.defaults.exclude;
-      const include = pkg.dllPlugin.include || ReactBoilerplate.dllPlugin.defaults.include;
-      const includeDependencies = uniq(dependencyNames.concat(include));
+    entry(pkg) {
+      const dependencyNames = Object.keys(pkg.dependencies)
+      const exclude =
+        pkg.dllPlugin.exclude || ReactBoilerplate.dllPlugin.defaults.exclude
+      const include =
+        pkg.dllPlugin.include || ReactBoilerplate.dllPlugin.defaults.include
+      const includeDependencies = uniq(dependencyNames.concat(include))
 
       return {
         reactBoilerplateDeps: pullAll(includeDependencies, exclude),
-      };
+      }
     },
   },
-};
+}
 
-module.exports = ReactBoilerplate;
+module.exports = ReactBoilerplate
