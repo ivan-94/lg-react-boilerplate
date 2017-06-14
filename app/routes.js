@@ -21,6 +21,8 @@ export default function createRoutes(store) {
     {
       path: '/',
       name: 'home',
+      // micro Cache
+      cacheable: true,
       getComponent(nextState, cb) {
         // 动态注入容器，由于import不能动态化，所以只能显示import，导入的顺序为component、 reducer、saga
         loadComponent(
@@ -36,6 +38,8 @@ export default function createRoutes(store) {
     {
       path: '*',
       name: 'notFound',
+      // static cache
+      static: true,
       getComponent(nextState, cb) {
         loadStandaloneComponent(import('containers/NotFoundPage'), cb)
       },

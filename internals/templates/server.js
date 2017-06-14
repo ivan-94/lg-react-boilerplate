@@ -4,6 +4,8 @@ import morgan from 'morgan'
 import chalk from 'chalk'
 import express from 'express'
 import compression from 'compression'
+import LRU from 'lru-cache'
+import warning from 'warning'
 import minimist from 'minimist'
 import { match, createMemoryHistory } from 'react-router'
 import { syncHistoryWithStore } from 'react-router-redux'
@@ -20,6 +22,15 @@ const customHost = argv.host || process.env.HOST
 const host = customHost || null // Let http.Server use its default IPv6/4 host
 const prettyHost = customHost || 'localhost'
 const app = express()
+
+// micro cache
+const microCache = LRU({
+  max: 100,
+  maxAge: 1000,
+})
+
+// static cache
+const staticCache = LRU()
 
 // logger
 app.use(morgan('combined'))
@@ -53,9 +64,46 @@ app.use((req, res) => {
           `${redirectLocation.pathname}${redirectLocation.search}`
         )
       } else if (renderProps) {
-        const notFound = renderProps.routes.some(route => route.path === '*')
+        const matchedRoutes = renderProps.routes
+        const leafRoute = matchedRoutes[matchedRoutes.length - 1]
+        const notFound = matchedRoutes.some(route => route.path === '*')
+        const cacheKey = leafRoute.name || leafRoute.path
+        if (process.env.NODE_ENV === 'development') {
+          warning(leafRoute.name != null, `route#name is required`)
+        }
+
+        // micro cache
+        if (leafRoute.cacheable) {
+          const hit = microCache.get(cacheKey)
+          if (hit) {
+            if (process.env.NODE_ENV === 'development') {
+              console.log('cache hit!')
+            }
+            return res.status(notFound ? 404 : 200).send(hit)
+          }
+        }
+
+        // static cache
+        if (leafRoute.static) {
+          const hit = staticCache.get(cacheKey)
+          if (hit) {
+            if (process.env.NODE_ENV === 'development') {
+              console.log('static cache hit!')
+            }
+            return res.status(notFound ? 404 : 200).send(hit)
+          }
+        }
+
         const output = await render(store, renderProps)
         res.status(notFound ? 404 : 200).send(output)
+
+        if (leafRoute.cacheable) {
+          microCache.set(cacheKey, output)
+        }
+
+        if (leafRoute.static) {
+          staticCache.set(cacheKey, output)
+        }
       }
     }
   )

@@ -18,11 +18,7 @@ const runServer = require('./runServer')
 
 const webpackConfig = [clientConfig, serverConfig]
 const app = express()
-const staticHtmlPath = path.join(
-  clientConfig.output.path,
-  clientConfig.output.publicPath,
-  'index.html'
-)
+const staticHtmlPath = path.join(clientConfig.output.path, 'index.html')
 
 module.exports = async function start() {
   await run(clean)
